@@ -1,14 +1,6 @@
-import { router } from 'expo-router';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { RegisterView } from '@/viewModels/Register/Register.view';
+import { useRegisterViewModel } from '@/viewModels/Register/useRegister.viewModel';
 
 export default function Register() {
-  return (
-    <View>
-      <Text>Registrar-se</Text>
-
-      <TouchableOpacity onPress={() => router.push('login')}>
-        <Text>Login</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  return <RegisterView {...useRegisterViewModel()} />;
 }
