@@ -1,4 +1,9 @@
 import axios, { AxiosInstance } from 'axios'
+import { Platform } from 'react-native'
+
+const getBaseURL = () => {
+  return Platform.OS === 'ios' ? 'http://localhost:3001' : 'http://10.0.2.2:3001'
+}
 
 export class MarketPlaceApiClient {
   private instance: AxiosInstance
@@ -6,7 +11,7 @@ export class MarketPlaceApiClient {
 
   constructor() {
     this.instance = axios.create({
-      baseURL: '',
+      baseURL: getBaseURL(),
     })
   }
 
