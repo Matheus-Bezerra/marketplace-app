@@ -3,29 +3,19 @@ import BottomSheet, {
   BottomSheetBackdropProps,
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
 import { colors } from '../../../styles/colors'
 import { useBottomSheetStore } from '../../store/bottomsheet-store'
 
 export const AppBottomSheet = () => {
   const { content, close, isOpen, config } = useBottomSheetStore()
 
-  const bottomSheetRef = useRef<BottomSheet>(null)
-
   const snapPoints = useMemo(
     () => config?.snapPoints || ['80%', '90%'],
     [config?.snapPoints],
   )
 
-  useEffect(() => {
-    if (isOpen && content) {
-      requestAnimationFrame(() => {
-        bottomSheetRef.current?.snapToIndex(0)
-      })
-    } else {
-      bottomSheetRef.current?.close()
-    }
-  }, [isOpen, content])
+  const sheetIndex = isOpen && content ? 0 : -1
 
   const handleSheetChanges = useCallback(
     (index: number) => {
@@ -50,7 +40,6 @@ export const AppBottomSheet = () => {
 
   return (
     <BottomSheet
-      ref={bottomSheetRef}
       backgroundStyle={{
         backgroundColor: colors.background,
         borderTopLeftRadius: 32,
@@ -58,8 +47,7 @@ export const AppBottomSheet = () => {
       }}
       backdropComponent={renderBackdrop}
       enablePanDownToClose={config?.enablePanDownToClose ?? true}
-      index={-1}
-      animateOnMount
+      index={sheetIndex}
       snapPoints={snapPoints}
       onChange={handleSheetChanges}
     >

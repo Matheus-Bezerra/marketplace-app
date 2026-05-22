@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import '@/styles/global.css';
+import { AppBottomSheet } from '@/shared/components/AppBottomSheet';
 import { AppModal } from '@/shared/components/AppModal';
 import ToastManager from 'toastify-react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -18,6 +19,7 @@ export default function RootLayout() {
           <Stack.Screen name="(private)" />
         </Stack>
         <AppModal />
+        <AppBottomSheet />
         <ToastManager />
       </QueryClientProvider>
     </GestureHandlerRootView>
