@@ -1,25 +1,27 @@
 import { marketPlaceApiClient } from '../api/market-place'
-import { ProductResponse } from '../interfaces/http/product-response'
 import { ProductRequest } from '../interfaces/http/product'
-import { ProductCategoryInterface } from '../interfaces/http/product-category'
+import { GetProductDetailsInterface } from '../interfaces/http/product-detail'
+import { ProductResponse } from '../interfaces/http/product-response'
+import { ProductCategory } from '../interfaces/product'
 
-export const getProducts = async ({ pagination, filters, sort }: ProductRequest) => {
+export const getProducts = async (params: ProductRequest) => {
   const { data } = await marketPlaceApiClient.post<ProductResponse>(
     '/products',
-    {
-      pagination,
-      filters,
-      sort,
-    },
+    params,
   )
-
   return data
 }
 
-export const getProductCategories = async () => {
-  const { data } = await marketPlaceApiClient.get<ProductCategoryInterface[]>(
+export const getProductsCategories = async () => {
+  const { data } = await marketPlaceApiClient.get<ProductCategory[]>(
     '/products/categories',
   )
+  return data
+}
 
+export const getProductDetails = async (id: number) => {
+  const { data } = await marketPlaceApiClient.get<GetProductDetailsInterface>(
+    `/products/${id}`,
+  )
   return data
 }
