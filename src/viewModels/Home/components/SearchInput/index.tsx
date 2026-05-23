@@ -3,8 +3,15 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import { AppInput } from '../../../../shared/components/AppInput'
 import { useBottomSheetStore } from '../../../../shared/store/bottomsheet-store'
 import { colors } from '../../../../styles/colors'
+import { Filter } from '../Filter'
+import { FC } from 'react'
 
-export const SearchInput = () => {
+interface SearchInputParams {
+  setSearchInputText: (text: string) => void
+  inputValue: string
+}
+
+export const SearchInput: FC<SearchInputParams> = ({ setSearchInputText, inputValue }) => {
   const { open } = useBottomSheetStore()
   return (
     <View className="mb-3 mt-6">
@@ -12,6 +19,9 @@ export const SearchInput = () => {
       <View className="flex-row">
         <View className="flex-1">
           <AppInput
+            value={inputValue}
+            onChangeText={setSearchInputText}
+            placeholder='Pesquisar'
             leftIcon="search"
             returnKeyType="search"
             className="text-lg flex-1"
@@ -19,7 +29,7 @@ export const SearchInput = () => {
         </View>
 
         <TouchableOpacity
-          onPress={() => open({ content: <Text>Hello</Text> })}
+          onPress={() => open({ content: <Filter /> })}
           className="ml-5 mt-6 items-center justify-center rounded-lg border size-[48px] border-purple-base"
         >
           <Ionicons
