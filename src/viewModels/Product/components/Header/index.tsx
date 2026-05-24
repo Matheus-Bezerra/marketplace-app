@@ -9,9 +9,10 @@ import { colors } from '../../../../styles/colors'
 
 interface HeaderParams {
   productDetails: GetProductDetailsInterface
+  handleOpenReview: () => void
 }
 
-export const Header: FC<HeaderParams> = ({ productDetails }) => {
+export const Header: FC<HeaderParams> = ({ productDetails, handleOpenReview }) => {
   console.log({ productDetails })
 
   return (
@@ -99,7 +100,7 @@ export const Header: FC<HeaderParams> = ({ productDetails }) => {
         <View className="flex-row items-center justify-between py-4 border-t border-gray-200">
           <Text className="text-base font-bold text-gray-800">Avaliações</Text>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenReview}>
             <Text className="text-purple-base text-base font-medium">
               Avaliar
             </Text>
