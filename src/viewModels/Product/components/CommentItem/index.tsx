@@ -1,21 +1,25 @@
 import { Ionicons } from '@expo/vector-icons'
 import { FC } from 'react'
-import { Image, Text, View } from 'react-native'
+import { Image, Pressable, Text, View } from 'react-native'
 import { ProductComment } from '../../../../shared/interfaces/product-comment'
 import { useUserStore } from '../../../../shared/store/user-store'
 import { colors } from '../../../../styles/colors'
 
 interface CommentItemParams {
   comment: ProductComment
+  onEditComment?: () => void
 }
 
-export const CommentItem: FC<CommentItemParams> = ({ comment }) => {
+export const CommentItem: FC<CommentItemParams> = ({
+  comment,
+  onEditComment,
+}) => {
   const { user } = useUserStore()
 
   const isCurrentUser = user?.id === comment.user.id
 
-  return (
-    <View className="bg-white p-4 mb-3 rounded-lg shadow-sm">
+  const cardContent = (
+    <>
       <View className="flex-row items-center justify-between mb-3">
         <View className="flex-row items-center flex-1">
           <View className="size-8 rounded-[6px] overflow-hidden bg-gray-200 mr-3">
@@ -55,6 +59,26 @@ export const CommentItem: FC<CommentItemParams> = ({ comment }) => {
         </View>
       </View>
       <Text>{comment.content}</Text>
-    </View>
+    </>
+  )
+
+  if (!isCurrentUser) {
+    return (
+      <View className="w-full bg-white p-4 mb-3 rounded-lg shadow-sm">
+        {cardContent}
+      </View>
+    )
+  }
+
+  return (
+    <Pressable
+      onPress={onEditComment}
+      className="w-full bg-white p-4 mb-3 rounded-lg shadow-sm"
+      style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+      accessibilityRole="button"
+      accessibilityLabel="Editar sua avaliação"
+    >
+      {cardContent}
+    </Pressable>
   )
 }

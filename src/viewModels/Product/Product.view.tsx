@@ -33,7 +33,12 @@ export const ProductView: FC<ReturnType<typeof useProductViewModel>> = ({
     <SafeAreaView edges={['top']} className="flex-1 bg-background">
       <FlatList
         data={comments}
-        renderItem={({ item }) => <CommentItem comment={item} />}
+        renderItem={({ item }) => (
+          <CommentItem
+            comment={item}
+            onEditComment={handleOpenReviewBottomSheet}
+          />
+        )}
         ListHeaderComponent={() => (
           <Header
             handleOpenReview={handleOpenReviewBottomSheet}

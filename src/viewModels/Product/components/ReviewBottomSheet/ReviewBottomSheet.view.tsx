@@ -9,20 +9,36 @@ import { useReviewBottomSheetViewModel } from './useReviewBottomSheet.viewModel'
 
 export const ReviewBottomSheetView: FC<
   ReturnType<typeof useReviewBottomSheetViewModel>
-> = ({ handleContentChange, handleRatingChange, ratingForm, handleFormSubmit, isLoading }) => {
+> = ({
+  handleContentChange,
+  handleRatingChange,
+  ratingForm,
+  handleFormSubmit,
+  handleClose,
+  isSubmitting,
+  isLoadingUserComment,
+}) => {
   return (
     <View className="bg-background rounded-t-2xl">
       <View className="flex-row items-center justify-between p-6">
         <Text className="text-lg font-bold text-gray-900">
           {ratingForm.isEditing ? 'Editar avaliação' : 'Avaliar produto'}
         </Text>
-        <TouchableOpacity className="size-8 items-center justify-center rounded-[10px] border border-gray-400">
+        <TouchableOpacity
+          onPress={handleClose}
+          className="size-8 items-center justify-center rounded-[10px] border border-gray-400"
+        >
           <Ionicons name="close" size={24} color={colors.gray[400]} />
         </TouchableOpacity>
       </View>
-      {isLoading ? <View className='p-6 items-center justify-center min-h-[300px]'><ActivityIndicator color={colors['purple-base']} size="large" />
-        <Text className='text-gray-600 text-center mt-4'>Verificando avaliação existente...</Text>
-      </View> : (
+      {isLoadingUserComment ? (
+        <View className="p-6 items-center justify-center min-h-[300px]">
+          <ActivityIndicator color={colors['purple-base']} size="large" />
+          <Text className="text-gray-600 text-center mt-4">
+            Verificando avaliação existente...
+          </Text>
+        </View>
+      ) : (
         <View className="p-6">
           <Text className="font-semibold text-base text-gray-300">Nota</Text>
           <View className="flex-row items-center mb-6 gap-2">
@@ -49,10 +65,20 @@ export const ReviewBottomSheetView: FC<
           />
 
           <View className="flex-row gap-3 mb-6">
-            <AppButton variant="outlined" className="flex-1" onPress={() => {}}>
+            <AppButton
+              variant="outlined"
+              className="flex-1"
+              onPress={handleClose}
+              isDisabled={isSubmitting}
+            >
               Cancelar
             </AppButton>
-            <AppButton className="flex-1" onPress={handleFormSubmit}>
+            <AppButton
+              className="flex-1"
+              onPress={handleFormSubmit}
+              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
+            >
               {ratingForm.isEditing ? 'Atualizar' : 'Enviar'}
             </AppButton>
           </View>

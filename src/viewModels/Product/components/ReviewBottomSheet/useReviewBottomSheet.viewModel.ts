@@ -45,31 +45,41 @@ export const useReviewBottomSheetViewModel = (productId: number) => {
     }))
   }
 
+  const handleClose = () => {
+    closeBottomSheet()
+  }
+
   const handleFormSubmit = async () => {
     if (ratingForm.rating === 0) {
       Toast.warn('Por favor, selecione uma nota.', 'top')
+      return
     }
 
     if (!ratingForm.content.trim()) {
       Toast.warn('Por favor, escreva um comentário.', 'top')
+      return
     }
 
     const { isEditing, ...formData } = ratingForm
 
     if (isEditing) {
-      updateCommentMutation.mutate({
-        ...formData,
-        commentId: formData.commentId!,
-      })
+      updateCommentMutation.mutate(
+        {
+          ...formData,
+          commentId: formData.commentId!,
+        },
+        { onSuccess: () => closeBottomSheet() },
+      )
     } else {
-      createCommentMutation.mutate({
-        ...formData,
-        productId,
-        rating: formData.rating,
-      })
+      createCommentMutation.mutate(
+        {
+          ...formData,
+          productId,
+          rating: formData.rating,
+        },
+        { onSuccess: () => closeBottomSheet() },
+      )
     }
-
-    closeBottomSheet()
   }
 
   useEffect(() => {
@@ -85,7 +95,7 @@ export const useReviewBottomSheetViewModel = (productId: number) => {
     }
   }, [userComment])
 
-  const isLoading =
+  const isSubmitting =
     createCommentMutation.isPending || updateCommentMutation.isPending
 
   return {
@@ -93,6 +103,8 @@ export const useReviewBottomSheetViewModel = (productId: number) => {
     handleRatingChange,
     ratingForm,
     handleFormSubmit,
-    isLoading,
+    handleClose,
+    isSubmitting,
+    isLoadingUserComment,
   }
 }
