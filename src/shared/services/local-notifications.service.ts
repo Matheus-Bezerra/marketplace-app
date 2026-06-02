@@ -9,6 +9,8 @@ const NOTIFICATION_IDS = {
   PURCHASE_FEEDBACK: 'purchase-feedback',
 }
 
+const DEEP_LINK = 'marketplace://'
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldPlaySound: true,
@@ -29,6 +31,14 @@ const requestPermissions = async (): Promise<boolean> => {
   }
 
   return finalStatus === 'granted'
+}
+
+const cancelNotification = async (notificationId: string) => {
+  try {
+    await Notifications.cancelScheduledNotificationAsync(notificationId)
+  } catch (error) {
+    console.error('[LocalNotifications] - Error canceling notification', JSON.stringify(error))
+  }
 }
 
 const setupNotificationChannel = async () => {
@@ -61,13 +71,14 @@ const scheduleCartReminder = async ({
   }
 
   await Notifications.scheduleNotificationAsync({
-    identifier: NOTIFICATION_IDS.CART_REMINDER,
+    identifier: `${NOTIFICATION_IDS.CART_REMINDER}-${productId}`,
     content: {
       title: 'Você esqueceu algo no carrinho!',
       body: `O produto ${productName} está esperando por você. Finalize sua compra agora!`,
       data: {
         type: 'cart_reminder',
         productId: String(productId),
+        deepLink: `${DEEP_LINK}cart`,
       },
     },
     trigger: {
@@ -97,6 +108,7 @@ const scheduleFeedbackNotification = async ({
       data: {
         type: 'purchase_feedback',
         productId: String(productId),
+        deepLink: `${DEEP_LINK}product/${productId}?openFeedbackBottomSheet=true`,
       },
     },
     trigger: {
@@ -110,7 +122,9 @@ const scheduleFeedbackNotification = async ({
 
 export const localNotificationsService = {
   scheduleCartReminder,
+  cancelNotification,
   requestPermissions,
   setupNotificationChannel,
   scheduleFeedbackNotification,
+  NOTIFICATION_IDS,
 }

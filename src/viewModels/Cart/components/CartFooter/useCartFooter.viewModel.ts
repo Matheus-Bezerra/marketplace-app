@@ -23,11 +23,13 @@ export const useCartFooterViewModel = () => {
     })
 
     products.forEach((product, index) => {
+      localNotificationsService.cancelNotification(`${localNotificationsService.NOTIFICATION_IDS.CART_REMINDER}-${product.id}`)
+      
       localNotificationsService.scheduleFeedbackNotification({
         productName: product.name,
         productId: product.id,
         delayInMinutes: 5 * (index + 1),
-      })
+      })      
     })
 
     clearCart()
