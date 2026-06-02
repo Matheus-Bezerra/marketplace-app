@@ -33,6 +33,13 @@
 - [Axios](https://axios-http.com/) (cliente HTTP com interceptors de auth)
 - [Zustand](https://zustand.docs.pmnd.rs/) (estado global: usuário, carrinho, filtros, modais)
 
+### Notificações & deep links
+
+- [expo-notifications](https://docs.expo.dev/versions/latest/sdk/notifications/) — notificações locais agendadas (lembrete de carrinho e feedback pós-compra)
+- Permissões, canal Android (`HIGH`) e cancelamento ao concluir o pedido
+- Deep link `marketplace://` via [Expo Router](https://docs.expo.dev/router/introduction/) + `Linking` — ao tocar na notificação, abre carrinho ou detalhe do produto com bottom sheet de avaliação
+- Serviço centralizado em `src/shared/services/local-notifications.service.ts` e hook `useNotifications`
+
 ### UI & formulários
 
 - [NativeWind](https://www.nativewind.dev/) + [Tailwind CSS 3](https://tailwindcss.com/)
@@ -46,7 +53,6 @@
 
 ### Device & utilitários
 
-- [expo-notifications](https://docs.expo.dev/versions/latest/sdk/notifications/) (notificações locais e deep links)
 - [expo-image-picker](https://docs.expo.dev/versions/latest/sdk/imagepicker/) (avatar via câmera ou galeria)
 - [@react-native-async-storage/async-storage](https://react-native-async-storage.github.io/async-storage/) (persistência de sessão)
 - [date-fns](https://date-fns.org/) (formatação de datas)
