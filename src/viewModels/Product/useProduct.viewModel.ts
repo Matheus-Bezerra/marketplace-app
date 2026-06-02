@@ -8,6 +8,7 @@ import { useCartStore } from '../../shared/store/cart-store'
 import { useModalStore } from '../../shared/store/modal-store'
 import { AddToCartSuccessModal } from './components/AddToCartSuccessModal'
 import { ReviewBottomSheet } from './components/ReviewBottomSheet'
+import { localNotificationsService } from '@/shared/services/local-notifications.service'
 
 export const useProductViewModel = (productId: number) => {
   const {
@@ -67,6 +68,12 @@ export const useProductViewModel = (productId: number) => {
       name: productDetails.name,
       price: productDetails.value,
       image: buildImageUrl(productDetails.photo),
+    })
+
+    localNotificationsService.scheduleCartReminder({
+      productId: productDetails.id,
+      productName: productDetails.name,
+      delayInMinutes: 30,
     })
 
     open(

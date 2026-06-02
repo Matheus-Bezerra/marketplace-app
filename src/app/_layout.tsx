@@ -5,10 +5,13 @@ import { AppBottomSheet } from '@/shared/components/AppBottomSheet';
 import { AppModal } from '@/shared/components/AppModal';
 import ToastManager from 'toastify-react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useNotifications } from '@/shared/hooks/useNotifications';
 
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
+
+  useNotifications()
 
   return (
     <GestureHandlerRootView className='flex-1'>
