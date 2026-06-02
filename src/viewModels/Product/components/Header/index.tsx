@@ -13,7 +13,7 @@ interface HeaderParams {
 }
 
 export const Header: FC<HeaderParams> = ({ productDetails, handleOpenReview }) => {
-  console.log({ productDetails })
+  const photoUrl = buildImageUrl(productDetails.photo)
 
   return (
     <>
@@ -27,12 +27,19 @@ export const Header: FC<HeaderParams> = ({ productDetails, handleOpenReview }) =
         </TouchableOpacity>
       </View>
       <View className="w-full rounded-lg shadow-xl shadow-gray-500/30 bg-white">
-        <Image
-          source={{
-            uri: buildImageUrl(productDetails.photo),
-          }}
-          className="w-full rounded-lg h-[192px]"
-        />
+        {photoUrl ? (
+          <Image
+            source={{
+              uri: photoUrl,
+            }}
+            className="w-full rounded-lg h-[192px]"
+            resizeMode="cover"
+          />
+        ) : (
+          <View className="w-full rounded-lg h-[192px] bg-gray-200 items-center justify-center">
+            <Ionicons name="image-outline" size={48} color={colors.gray[400]} />
+          </View>
+        )}
         <View className="items-center absolute top-0 right-0 flex-row bg-blue-light px-2 py-1 rounded-bl-lg rounded-tr-lg">
           <Ionicons name="star" size={16} color={colors['blue-base']} />
           <Text className="text-sm font-semibold ml-1 text-gray-800">

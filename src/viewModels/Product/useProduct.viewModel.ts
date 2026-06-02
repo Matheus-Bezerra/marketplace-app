@@ -1,5 +1,6 @@
 import { router } from 'expo-router'
 import { createElement } from 'react'
+import { buildImageUrl } from '../../shared/helpers/buildImageUrl'
 import { useGetProductCommentsInfiniteQuery } from '../../shared/queries/product/use-get-product-comments-infinite-query'
 import { useGetProductDetails } from '../../shared/queries/product/use-get-product-details'
 import { useBottomSheetStore } from '../../shared/store/bottomsheet-store'
@@ -65,7 +66,7 @@ export const useProductViewModel = (productId: number) => {
       id: productDetails.id,
       name: productDetails.name,
       price: productDetails.value,
-      image: productDetails.photo,
+      image: buildImageUrl(productDetails.photo),
     })
 
     open(

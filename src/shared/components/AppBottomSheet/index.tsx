@@ -3,51 +3,75 @@ import BottomSheet, {
   BottomSheetBackdropProps,
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet'
-import {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { colors } from '../../../styles/colors'
 import { useBottomSheetStore } from '../../store/bottomsheet-store'
+
+const MAX_OPEN_ATTEMPTS = 8
+const OPEN_RETRY_DELAY_MS = 32
 
 export const AppBottomSheet = () => {
   const { content, isOpen, config, close } = useBottomSheetStore()
   const bottomSheetRef = useRef<BottomSheet>(null)
-  const [displayedContent, setDisplayedContent] = useState<ReactNode | null>(
-    null,
-  )
-
-  useEffect(() => {
-    if (content) {
-      setDisplayedContent(content)
-    }
-  }, [content])
+  const openAttemptRef = useRef(0)
 
   const snapPoints = useMemo(
-    () => config?.snapPoints || ['80%', '90%'],
+    () => config?.snapPoints ?? ['80%', '90%'],
     [config?.snapPoints],
   )
 
   useEffect(() => {
-    if (isOpen && content) {
-      bottomSheetRef.current?.snapToIndex(0)
+    requestAnimationFrame(() => {
+      bottomSheetRef.current?.close()
+    })
+  }, [])
+
+  const snapOpen = useCallback(() => {
+    const sheet = bottomSheetRef.current
+
+    if (sheet) {
+      sheet.snapToIndex(0)
+      openAttemptRef.current = 0
+      return true
     }
-  }, [isOpen, content])
+
+    return false
+  }, [])
+
+  const trySnapOpen = useCallback(
+    function trySnap(attempt = 0) {
+      if (!useBottomSheetStore.getState().isOpen) return
+
+      if (snapOpen()) return
+
+      if (attempt < MAX_OPEN_ATTEMPTS) {
+        setTimeout(() => trySnap(attempt + 1), OPEN_RETRY_DELAY_MS)
+      }
+    },
+    [snapOpen],
+  )
 
   useEffect(() => {
-    if (!isOpen && displayedContent) {
+    if (!isOpen || !content) return
+
+    openAttemptRef.current = 0
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        trySnapOpen()
+      })
+    })
+  }, [isOpen, content, trySnapOpen])
+
+  useEffect(() => {
+    if (!isOpen) {
       bottomSheetRef.current?.close()
     }
-  }, [isOpen, displayedContent])
+  }, [isOpen])
 
   const handleSheetChanges = useCallback(
     (index: number) => {
-      if (index === -1) {
-        setDisplayedContent(null)
+      if (index === -1 && useBottomSheetStore.getState().isOpen) {
         close()
       }
     },
@@ -66,10 +90,6 @@ export const AppBottomSheet = () => {
     )
   }, [])
 
-  if (!displayedContent) {
-    return null
-  }
-
   return (
     <BottomSheet
       ref={bottomSheetRef}
@@ -84,7 +104,7 @@ export const AppBottomSheet = () => {
       snapPoints={snapPoints}
       onChange={handleSheetChanges}
     >
-      <BottomSheetScrollView>{displayedContent}</BottomSheetScrollView>
+      <BottomSheetScrollView>{content}</BottomSheetScrollView>
     </BottomSheet>
   )
 }

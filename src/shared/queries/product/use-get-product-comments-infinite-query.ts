@@ -2,7 +2,6 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { buildImageUrl } from '../../helpers/buildImageUrl'
 import { ProductComment } from '../../interfaces/product-comment'
 import { getProductComments } from '../../services/product.service'
-import { baseURL } from '@/shared/api/market-place'
 
 export const useGetProductCommentsInfiniteQuery = (productId: number) => {
   const query = useInfiniteQuery({
@@ -29,7 +28,9 @@ export const useGetProductCommentsInfiniteQuery = (productId: number) => {
         user: {
           ...comment.user,
           avatar: {
-            url: comment.user.avatar?.url ? baseURL + comment.user.avatar.url : undefined,
+            url: comment.user.avatar?.url
+              ? buildImageUrl(comment.user.avatar.url)
+              : undefined,
           },
         },
       })) as ProductComment[]) ?? []
