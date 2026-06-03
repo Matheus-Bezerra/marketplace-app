@@ -18,7 +18,15 @@
 ## 🎬 Preview
 
 <p align="center">
-  <img src="./docs/demo.gif" alt="Demonstração do Marketplace App" width="320" />
+  <sub>⏳ O GIF animado pode levar alguns segundos para carregar no GitHub — enquanto isso, veja o preview estático abaixo; o vídeo aparecerá logo abaixo dele.</sub>
+</p>
+
+<p align="center">
+  <img src="./docs/demo-poster.png" alt="Preview estático do Marketplace App" width="320" />
+</p>
+
+<p align="center">
+  <img src="./docs/demo.gif" alt="Demonstração animada do Marketplace App" width="320" />
 </p>
 
 ## 💻 Tecnologias
@@ -262,7 +270,7 @@ src/
 1. `git clone https://github.com/Matheus-Bezerra/marketplace-app.git`
 2. `git checkout -b feature/NOME_DA_FEATURE`
 3. Siga o padrão de commits do time
-4. Abra um Pull Request explicando a feature ou correção. Se houver mudança visual, anexe prints ou atualize o GIF em `docs/demo.gif` e aguarde a revisão
+4. Abra um Pull Request explicando a feature ou correção. Se houver mudança visual, anexe prints ou atualize `docs/demo.gif` e regenere o poster (`sips -s format png docs/demo.gif --out docs/demo-poster.png`)
 
 ### Documentações úteis
 
